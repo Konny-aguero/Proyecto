@@ -5,9 +5,11 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private CardLayout cardLayout; // para cambiar entre paneles
-    private JPanel cards;           // panel que contiene todas las “pantallas”
-    private MenuBackgroundPanel background; // fondo dinámico
+    private CardLayout cardLayout;
+    private JPanel cards;
+    private MenuBackgroundPanel background;
+    private NewGamePanel newGamePanel;
+
 
     public MainWindow() {
         setTitle("Reverse Dots");
@@ -15,38 +17,38 @@ public class MainWindow extends JFrame {
         setSize(1000, 510);
         setLocationRelativeTo(null);
 
-        // Panel de fondo con título inicial
         background = new MenuBackgroundPanel("REVERSE DOTS");
         background.setLayout(new BorderLayout());
 
-        // Panel con CardLayout dentro del fondo
         cardLayout = new CardLayout();
         cards = new JPanel(cardLayout);
-        cards.setOpaque(false); // para que se vea el fondo
+        cards.setOpaque(false);
 
-        // Crear paneles
+        // --- INSTANCIAR PANELES ---
         MainMenuPanel mainMenu = new MainMenuPanel(this);
-        LoadGamePanel loadGame = new LoadGamePanel(this);
+        newGamePanel = new NewGamePanel(this);
+        BoardView boardView = new BoardView(this); // El panel del juego
 
-        // Agregar paneles al CardLayout
+        // --- AGREGAR AL CARDLAYOUT ---
         cards.add(mainMenu, "MainMenu");
-        cards.add(loadGame, "LoadGame");
+        cards.add(newGamePanel, "NewGame");
+        cards.add(boardView, "BoardView"); // Agregamos la vista del tablero
 
-        // Agregar cards al fondo
         background.add(cards, BorderLayout.CENTER);
-
-        // Poner el fondo como content pane
         setContentPane(background);
         setVisible(true);
     }
 
-    // Método para cambiar de pantalla y actualizar título dinámico
     public void showPanel(String name) {
-        if(name.equals("MainMenu")) {
+        // Actualizamos el título del fondo según la pantalla
+        if (name.equals("MainMenu")) {
             background.setTitle("REVERSE DOTS");
-        } else if(name.equals("LoadGame")) {
-            background.setTitle("CARGAR PARTIDA");
+        } else if (name.equals("NewGame")) {
+            background.setTitle("Nueva Partida");
+        } else if (name.equals("BoardView")) {
+            background.setTitle(newGamePanel.getP1() + " vs " + newGamePanel.getP2());
         }
+
         cardLayout.show(cards, name);
     }
 }
