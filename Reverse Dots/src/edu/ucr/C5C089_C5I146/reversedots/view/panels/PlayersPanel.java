@@ -27,3 +27,4 @@ public class PlayersPanel extends JPanel {
         add(back, BorderLayout.SOUTH);
     }
 }
+

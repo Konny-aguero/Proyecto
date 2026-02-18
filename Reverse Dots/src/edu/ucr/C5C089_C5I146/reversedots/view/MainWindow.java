@@ -1,6 +1,7 @@
 package edu.ucr.C5C089_C5I146.reversedots.view;
 
 import edu.ucr.C5C089_C5I146.reversedots.view.panels.*;
+import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuBackgroundPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,7 +45,7 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // Creamos la barra de menú global
+        // barra de menú global
         createMenuBar();
 
         background = new MenuBackgroundPanel();

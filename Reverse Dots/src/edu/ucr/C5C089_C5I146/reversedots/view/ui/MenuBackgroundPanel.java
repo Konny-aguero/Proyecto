@@ -1,4 +1,4 @@
-package edu.ucr.C5C089_C5I146.reversedots.view;
+package edu.ucr.C5C089_C5I146.reversedots.view.ui;
 
 import javax.swing.*;
 import java.awt.*;
