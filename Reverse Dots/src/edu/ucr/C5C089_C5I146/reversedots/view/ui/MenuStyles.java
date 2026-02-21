@@ -4,8 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuStyles extends JPanel {
+    private Image backgroundImage;
     public MenuStyles() {
         setOpaque(true);
+        backgroundImage = new ImageIcon(getClass().getResource("images/fondo.png")).getImage();
+        setPreferredSize(new Dimension(300, 500));
     }
     public static JButton createMenuButton(String text) {
         JButton button = new JButton(text);
@@ -20,14 +23,6 @@ public class MenuStyles extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
-        Graphics2D g2 = (Graphics2D) g;
-
-        g2.setPaint(new GradientPaint(
-                0, 0, new Color(84, 94, 121),
-                getWidth(), getHeight(), new Color(120, 130, 150)
-        ));
-
-        g2.fillRect(0, 0, getWidth(), getHeight());
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 }

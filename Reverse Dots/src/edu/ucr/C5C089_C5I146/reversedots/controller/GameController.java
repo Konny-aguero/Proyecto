@@ -125,6 +125,4 @@ public class GameController {
         if (game == null) return new ArrayList<>();
         return game.getValidMoves(game.getCurrentPlayer().getColor());
     }
-
-
 }

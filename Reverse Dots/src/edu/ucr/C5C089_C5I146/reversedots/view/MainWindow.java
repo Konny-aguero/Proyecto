@@ -6,8 +6,6 @@ import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuStyles;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
-import java.io.File;
 
 public class MainWindow extends JFrame {
 
@@ -25,7 +23,6 @@ public class MainWindow extends JFrame {
     private JMenuBar menuBar;
     private JMenuItem newGameItem;
     private JMenuItem loadGameItem;
-    private JMenuItem saveGameItem;
     private JMenuItem playersItem;
     private JMenuItem exitItem;
 
@@ -83,11 +80,10 @@ public class MainWindow extends JFrame {
 
         newGameItem = new JMenuItem("Nueva partida");
         loadGameItem = new JMenuItem("Cargar partida");
-        saveGameItem = new JMenuItem("Guardar partida");
         playersItem = new JMenuItem("Jugadores registrados");
         exitItem = new JMenuItem("Salir");
 
-        // Acciones por defecto: navegar a los panels correspondientes
+        // navegar a los panels correspondientes
         newGameItem.addActionListener(e -> showPanel("NewGame"));
         loadGameItem.addActionListener(e -> showPanel("LoadGame"));
         playersItem.addActionListener(e -> showPanel("Players"));
@@ -98,13 +94,8 @@ public class MainWindow extends JFrame {
                 System.exit(0);
             }
         });
-
-        // Guardar deshabilitado por defecto; el controlador podrá habilitarlo y registrar listener
-        saveGameItem.setEnabled(false);
-
         menu.add(newGameItem);
         menu.add(loadGameItem);
-        menu.add(saveGameItem);
         menu.add(playersItem);
         menu.addSeparator();
         menu.add(exitItem);
@@ -114,51 +105,5 @@ public class MainWindow extends JFrame {
 
     public void showPanel(String name) {
         cardLayout.show(panel, name);
-    }
-
-    // Getters para que el controlador pueda registrar listeners
-    public JMenuItem getNewGameMenuItem() { return newGameItem; }
-    public JMenuItem getLoadGameMenuItem() { return loadGameItem; }
-    public JMenuItem getSaveGameMenuItem() { return saveGameItem; }
-    public JMenuItem getPlayersMenuItem() { return playersItem; }
-    public JMenuItem getExitMenuItem() { return exitItem; }
-
-    public void setSaveEnabled(boolean enabled) {
-        if (saveGameItem != null) saveGameItem.setEnabled(enabled);
-    }
-
-    public void addMenuActionListener(String key, ActionListener l) {
-        switch (key) {
-            case "NEW": newGameItem.addActionListener(l); break;
-            case "LOAD": loadGameItem.addActionListener(l); break;
-            case "SAVE": saveGameItem.addActionListener(l); break;
-            case "PLAYERS": playersItem.addActionListener(l); break;
-            case "EXIT": exitItem.addActionListener(l); break;
-            default: throw new IllegalArgumentException("Unknown menu key: " + key);
-        }
-    }
-
-    // Muestra diálogo para guardar un archivo; devuelve la ruta seleccionada o null si se canceló.
-    // Si el archivo existe, solicita confirmación de sobrescritura.
-    public String showSaveDialog() {
-        JFileChooser fc = new JFileChooser();
-        int res = fc.showSaveDialog(this);
-        if (res != JFileChooser.APPROVE_OPTION) return null;
-        File f = fc.getSelectedFile();
-        if (f.exists()) {
-            int over = JOptionPane.showConfirmDialog(this,
-                    "El archivo existe. ¿Desea sobrescribirlo?",
-                    "Confirmar sobrescritura", JOptionPane.YES_NO_OPTION);
-            if (over != JOptionPane.YES_OPTION) return null;
-        }
-        return f.getAbsolutePath();
-    }
-
-    // Muestra diálogo para abrir un archivo; devuelve la ruta seleccionada o null si se canceló.
-    public String showOpenDialog() {
-        JFileChooser fc = new JFileChooser();
-        int res = fc.showOpenDialog(this);
-        if (res != JFileChooser.APPROVE_OPTION) return null;
-        return fc.getSelectedFile().getAbsolutePath();
     }
 }

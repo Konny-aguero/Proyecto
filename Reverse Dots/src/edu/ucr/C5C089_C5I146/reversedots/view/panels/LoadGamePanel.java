@@ -11,13 +11,14 @@ public class LoadGamePanel extends JPanel {
     public LoadGamePanel(MainWindow window) {
 
         setOpaque(false);
-        setLayout(new BorderLayout());
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
 
-        JLabel title = new JLabel("Cargar Partida", SwingConstants.CENTER);
-        title.setForeground(Color.WHITE);
-        title.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
-        add(title, BorderLayout.NORTH);
+        gbc.gridy = 0;
+        gbc.insets = new Insets(15, 0, 15, 0);
 
+        // Botón Cargar
+        gbc.gridy++;
         JButton load = MenuStyles.createMenuButton("Seleccionar archivo...");
         load.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
@@ -26,11 +27,12 @@ public class LoadGamePanel extends JPanel {
                         "Archivo seleccionado:\n" + fc.getSelectedFile().getAbsolutePath());
             }
         });
+        add(load, gbc);
 
-        add(load, BorderLayout.CENTER);
-
+        // Botón Volver
+        gbc.gridy++;
         JButton back = MenuStyles.createMenuButton("Volver");
         back.addActionListener(e -> window.showPanel("MainMenu"));
-        add(back, BorderLayout.SOUTH);
+        add(back, gbc);
     }
 }

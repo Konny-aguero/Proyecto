@@ -18,7 +18,6 @@ public class BoardView extends JPanel {
     private final JLabel lblP2Stats;
     private final JTextArea messages;
     private final GameController controller;
-    private int boardSize;
 
     public BoardView(MainWindow window, GameController controller) {
         this.controller = controller;
@@ -30,7 +29,6 @@ public class BoardView extends JPanel {
         lblTurn = new JLabel("Turno: -", SwingConstants.CENTER);
         lblTurn.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         lblTurn.setForeground(Color.BLACK);
-
         add(lblTurn, BorderLayout.NORTH);
 
         // Panel tablero
@@ -38,7 +36,7 @@ public class BoardView extends JPanel {
         boardPanel.setOpaque(false);
         add(boardPanel, BorderLayout.CENTER);
 
-        // Panel estadisticas
+        // Panel derecha
         JPanel side = new JPanel();
         side.setBackground(new Color(156, 169, 214));
         side.setPreferredSize(new Dimension(220, 0));
@@ -58,23 +56,17 @@ public class BoardView extends JPanel {
         messages.setWrapStyleWord(true);
 
         JButton btnSave = new JButton("Guardar partida");
-
         btnSave.addActionListener(e -> {
-
             JFileChooser fileChooser = new JFileChooser();
             int option = fileChooser.showSaveDialog(this);
-
             if (option == JFileChooser.APPROVE_OPTION) {
-
                 java.io.File file = fileChooser.getSelectedFile();
-                boolean saved = this.controller.saveEGame(file);
-
+                boolean saved = controller.saveEGame(file);
                 if (saved) {
                     addMessage("Partida guardada correctamente.");
                 } else {
                     addMessage("Error al guardar la partida.");
                 }
-
             }
         });
 
@@ -87,22 +79,18 @@ public class BoardView extends JPanel {
         side.add(lblP2Stats);
         side.add(Box.createVerticalStrut(20));
         side.add(scroll);
-
-
         side.add(Box.createVerticalStrut(20));
         side.add(btnSave);
 
         add(side, BorderLayout.EAST);
     }
-    //creacion del tablero
-    public void buildBoard(int size) {
-        this.boardSize = size;
 
+    // Crear tablero
+    public void buildBoard(int size) {
         boardPanel.removeAll();
         boardPanel.setLayout(new GridLayout(size, size, 3, 3));
 
         for (int i = 0; i < size * size; i++) {
-
             JButton cell = new JButton();
             cell.setFocusPainted(false);
             cell.setBorderPainted(false);
@@ -116,18 +104,12 @@ public class BoardView extends JPanel {
             cell.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-
                     MoveResult result = controller.makeMove(row, col);
-
                     if (result == MoveResult.SUCCESS) {
-
                         refreshBoard();
-
                         if (controller.isGameOver()) {
-                            addMessage("Juego terminado. Ganador: " +
-                                    controller.getWinner().getName());
+                            addMessage("Juego terminado. Ganador: " + controller.getWinner().getName());
                         }
-
                     } else {
                         addMessage("Movimiento inválido: " + result);
                     }
@@ -146,58 +128,23 @@ public class BoardView extends JPanel {
         lblTurn.setText("Turno: " + text);
     }
 
-public void setStats(int p1, int p2) {
-    lblP1Stats.setText(controller.getPlayer1Name() + ": " + p1);
-    lblP2Stats.setText(controller.getPlayer2Name() + ": " + p2);
-}
+    public void setStats(int p1, int p2) {
+        lblP1Stats.setText(controller.getPlayer1Name() + ": " + p1);
+        lblP2Stats.setText(controller.getPlayer2Name() + ": " + p2);
+    }
 
     public void addMessage(String msg) {
         messages.append(msg + "\n");
     }
 
     public void refreshBoard() {
-
         if (controller.getBoard() == null) return;
 
         int size = controller.getBoard().getSize();
-
         Component[] components = boardPanel.getComponents();
 
         for (int i = 0; i < size * size; i++) {
-
-            int row = i / size;
-            int col = i % size;
-
             JButton cell = (JButton) components[i];
-
-            switch (controller.getBoard().getPiece(row, col)) {
-                case BLACK:
-                    cell.setBackground(Color.BLACK);
-                    break;
-                case WHITE:
-                    cell.setBackground(Color.WHITE);
-                    break;
-                default:
-                    cell.setBackground(new Color(209, 215, 229));
-            }
-        }
-
-        setTurn(controller.getCurrentPlayer().getName());
-        setStats(
-                controller.getPlayer1Score(),
-                controller.getPlayer2Score()
-        );
-        highlightValidMoves();
-    }
-    private void highlightValidMoves() {
-        List<int[]> moves = controller.getGame().getValidMoves(controller.getCurrentPlayer().getColor());
-        Component[] components = boardPanel.getComponents();
-        int size = controller.getBoard().getSize();
-
-        // 2. Primero restaurar colores por defecto
-        for (int i = 0; i < size * size; i++) {
-            JButton cell = (JButton) components[i];
-
             switch (controller.getBoard().getPiece(i / size, i % size)) {
                 case BLACK:
                     cell.setBackground(Color.BLACK);
@@ -206,19 +153,25 @@ public void setStats(int p1, int p2) {
                     cell.setBackground(Color.WHITE);
                     break;
                 default:
-                    cell.setBackground(new Color(209, 215, 229)); // celda vacía normal
+                    cell.setBackground(new Color(209, 215, 229));
+                    break;
             }
         }
 
-        // 3. Marcar válidos
-        for (int[] move : moves) {
-            int row = move[0];
-            int col = move[1];
+        setTurn(controller.getCurrentPlayer().getName());
+        setStats(controller.getPlayer1Score(), controller.getPlayer2Score());
+        highlightValidMoves();
+    }
 
+    private void highlightValidMoves() {
+        List<int[]> moves = controller.getValidMoves();
+        Component[] components = boardPanel.getComponents();
+        int size = controller.getBoard().getSize();
+
+        for (int[] move : moves) {
+            int row = move[0], col = move[1];
             JButton cell = (JButton) components[row * size + col];
             cell.setBackground(new Color(151, 164, 196));
         }
     }
-
-
 }
