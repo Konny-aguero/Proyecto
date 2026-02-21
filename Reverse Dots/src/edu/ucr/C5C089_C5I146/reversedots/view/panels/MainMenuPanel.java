@@ -1,7 +1,7 @@
 package edu.ucr.C5C089_C5I146.reversedots.view.panels;
 
 import edu.ucr.C5C089_C5I146.reversedots.view.MainWindow;
-import edu.ucr.C5C089_C5I146.reversedots.view.ui.UIUtils;
+import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuStyles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ public class MainMenuPanel extends JPanel {
         gbc.gridy = 0;
         gbc.insets = new Insets(15, 0, 15, 0);
 
-        JButton newGame = UIUtils.createMenuButton("Nueva partida");
-        JButton loadGame = UIUtils.createMenuButton("Cargar partida");
-        JButton players = UIUtils.createMenuButton("Jugadores registrados");
-        JButton exit = UIUtils.createMenuButton("Salir");
+        JButton newGame = MenuStyles.createMenuButton("Nueva partida");
+        JButton loadGame = MenuStyles.createMenuButton("Cargar partida");
+        JButton players = MenuStyles.createMenuButton("Jugadores registrados");
+        JButton exit = MenuStyles.createMenuButton("Salir");
 
         newGame.addActionListener(e -> window.showPanel("NewGame"));
         loadGame.addActionListener(e -> window.showPanel("LoadGame"));

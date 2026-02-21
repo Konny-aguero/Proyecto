@@ -1,6 +1,7 @@
 package edu.ucr.C5C089_C5I146.reversedots.view.panels;
 
 import edu.ucr.C5C089_C5I146.reversedots.view.MainWindow;
+import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuStyles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,10 +15,10 @@ public class LoadGamePanel extends JPanel {
 
         JLabel title = new JLabel("Cargar Partida", SwingConstants.CENTER);
         title.setForeground(Color.WHITE);
-        title.setFont(new Font("Arial", Font.BOLD, 22));
+        title.setFont(new Font("Comic Sans MS", Font.BOLD, 22));
         add(title, BorderLayout.NORTH);
 
-        JButton load = new JButton("Seleccionar archivo...");
+        JButton load = MenuStyles.createMenuButton("Seleccionar archivo...");
         load.addActionListener(e -> {
             JFileChooser fc = new JFileChooser();
             if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -28,7 +29,7 @@ public class LoadGamePanel extends JPanel {
 
         add(load, BorderLayout.CENTER);
 
-        JButton back = new JButton("Volver");
+        JButton back = MenuStyles.createMenuButton("Volver");
         back.addActionListener(e -> window.showPanel("MainMenu"));
         add(back, BorderLayout.SOUTH);
     }

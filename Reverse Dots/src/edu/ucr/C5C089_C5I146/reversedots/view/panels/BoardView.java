@@ -8,39 +8,39 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class BoardView extends JPanel {
 
-    private JPanel boardPanel;
-    private JLabel lblTurn;
-    private JLabel lblP1Stats;
-    private JLabel lblP2Stats;
-    private JTextArea messages;
-    private GameController controller;
-
-
+    private final JPanel boardPanel;
+    private final JLabel lblTurn;
+    private final JLabel lblP1Stats;
+    private final JLabel lblP2Stats;
+    private final JTextArea messages;
+    private final GameController controller;
     private int boardSize;
 
-    public BoardView(MainWindow window, GameController controller){
+    public BoardView(MainWindow window, GameController controller) {
         this.controller = controller;
-        setOpaque(false);
+        setOpaque(true);
+        setBackground(new Color(156, 169, 214));
         setLayout(new BorderLayout());
 
-        // === PANEL SUPERIOR: TURNO ===
+        // Turno
         lblTurn = new JLabel("Turno: -", SwingConstants.CENTER);
-        lblTurn.setFont(new Font("Arial", Font.BOLD, 20));
-        lblTurn.setForeground(Color.WHITE);
+        lblTurn.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
+        lblTurn.setForeground(Color.BLACK);
 
         add(lblTurn, BorderLayout.NORTH);
 
-        // === PANEL CENTRAL: TABLERO ===
+        // Panel tablero
         boardPanel = new JPanel();
         boardPanel.setOpaque(false);
         add(boardPanel, BorderLayout.CENTER);
 
-        // === PANEL DERECHO: ESTADÍSTICAS ===
+        // Panel estadisticas
         JPanel side = new JPanel();
-        side.setBackground(new Color(0, 0, 0, 90));
+        side.setBackground(new Color(156, 169, 214));
         side.setPreferredSize(new Dimension(220, 0));
         side.setLayout(new BoxLayout(side, BoxLayout.Y_AXIS));
 
@@ -51,11 +51,11 @@ public class BoardView extends JPanel {
 
         messages = new JTextArea();
         messages.setEditable(false);
-        messages.setOpaque(false);
+        messages.setOpaque(true);
+        messages.setBackground(new Color(100, 110, 150));
         messages.setForeground(Color.WHITE);
         messages.setLineWrap(true);
         messages.setWrapStyleWord(true);
-
 
         JButton btnSave = new JButton("Guardar partida");
 
@@ -67,10 +67,7 @@ public class BoardView extends JPanel {
             if (option == JFileChooser.APPROVE_OPTION) {
 
                 java.io.File file = fileChooser.getSelectedFile();
-
-                // Aquí más adelante llamaremos al controller
-                //addMessage("Guardar en: " + file.getAbsolutePath());
-                boolean saved = controller.saveEGame(file);
+                boolean saved = this.controller.saveEGame(file);
 
                 if (saved) {
                     addMessage("Partida guardada correctamente.");
@@ -81,14 +78,15 @@ public class BoardView extends JPanel {
             }
         });
 
+        JScrollPane scroll = new JScrollPane(messages);
+        scroll.getViewport().setBackground(new Color(100, 110, 150));
 
         side.add(Box.createVerticalStrut(20));
         side.add(lblP1Stats);
         side.add(Box.createVerticalStrut(20));
         side.add(lblP2Stats);
         side.add(Box.createVerticalStrut(20));
-        side.add(new JLabel("Mensajes:", SwingConstants.CENTER));
-        side.add(new JScrollPane(messages));
+        side.add(scroll);
 
 
         side.add(Box.createVerticalStrut(20));
@@ -96,10 +94,7 @@ public class BoardView extends JPanel {
 
         add(side, BorderLayout.EAST);
     }
-
-    // ============================================
-    //        CREACIÓN DEL TABLERO
-    // ============================================
+    //creacion del tablero
     public void buildBoard(int size) {
         this.boardSize = size;
 
@@ -113,7 +108,7 @@ public class BoardView extends JPanel {
             cell.setBorderPainted(false);
             cell.setContentAreaFilled(false);
             cell.setOpaque(true);
-            cell.setBackground(new Color(255, 255, 255, 160));
+            cell.setBackground(new Color(209, 215, 229));
 
             int row = i / size;
             int col = i % size;
@@ -121,20 +116,7 @@ public class BoardView extends JPanel {
             cell.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                   // addMessage("Click en celda (" + row + "," + col + ")");
-                    // Aquí se conectará al controlador real
-//                    if (controller.makeMove(row, col)) {
-//
-//                        refreshBoard();
-//
-//                        if (controller.isGameOver()) {
-//                            addMessage("Juego terminado. Ganador: " +
-//                                    controller.getWinner().getName());
-//                        }
-//
-//                    } else {
-//                        addMessage("Movimiento inválido.");
-//                    }
+
                     MoveResult result = controller.makeMove(row, col);
 
                     if (result == MoveResult.SUCCESS) {
@@ -157,16 +139,13 @@ public class BoardView extends JPanel {
 
         revalidate();
         repaint();
+        refreshBoard();
     }
 
     public void setTurn(String text) {
         lblTurn.setText("Turno: " + text);
     }
 
-//    public void setStats(int p1, int p2) {
-//        lblP1Stats.setText("Jugador 1: " + p1);
-//        lblP2Stats.setText("Jugador 2: " + p2);
-//    }
 public void setStats(int p1, int p2) {
     lblP1Stats.setText(controller.getPlayer1Name() + ": " + p1);
     lblP2Stats.setText(controller.getPlayer2Name() + ": " + p2);
@@ -199,7 +178,7 @@ public void setStats(int p1, int p2) {
                     cell.setBackground(Color.WHITE);
                     break;
                 default:
-                    cell.setBackground(new Color(255,255,255,160));
+                    cell.setBackground(new Color(209, 215, 229));
             }
         }
 
@@ -208,6 +187,37 @@ public void setStats(int p1, int p2) {
                 controller.getPlayer1Score(),
                 controller.getPlayer2Score()
         );
+        highlightValidMoves();
+    }
+    private void highlightValidMoves() {
+        List<int[]> moves = controller.getGame().getValidMoves(controller.getCurrentPlayer().getColor());
+        Component[] components = boardPanel.getComponents();
+        int size = controller.getBoard().getSize();
+
+        // 2. Primero restaurar colores por defecto
+        for (int i = 0; i < size * size; i++) {
+            JButton cell = (JButton) components[i];
+
+            switch (controller.getBoard().getPiece(i / size, i % size)) {
+                case BLACK:
+                    cell.setBackground(Color.BLACK);
+                    break;
+                case WHITE:
+                    cell.setBackground(Color.WHITE);
+                    break;
+                default:
+                    cell.setBackground(new Color(209, 215, 229)); // celda vacía normal
+            }
+        }
+
+        // 3. Marcar válidos
+        for (int[] move : moves) {
+            int row = move[0];
+            int col = move[1];
+
+            JButton cell = (JButton) components[row * size + col];
+            cell.setBackground(new Color(151, 164, 196));
+        }
     }
 
 

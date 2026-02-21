@@ -2,7 +2,7 @@ package edu.ucr.C5C089_C5I146.reversedots.view;
 
 import edu.ucr.C5C089_C5I146.reversedots.controller.GameController;
 import edu.ucr.C5C089_C5I146.reversedots.view.panels.*;
-import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuBackgroundPanel;
+import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuStyles;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,16 +12,15 @@ import java.io.File;
 public class MainWindow extends JFrame {
 
     private CardLayout cardLayout;
-    private JPanel cards;
+    private JPanel panel;
     private GameController controller;
-
     public MainMenuPanel mainMenuPanel;
     public NewGamePanel newGamePanel;
     public BoardView boardView;
     public PlayersPanel playersPanel;
     public LoadGamePanel loadGamePanel;
 
-    private MenuBackgroundPanel background;
+    private MenuStyles background;
 
     private JMenuBar menuBar;
     private JMenuItem newGameItem;
@@ -48,31 +47,29 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // barra de menú global
+        // barra de menú
         createMenuBar();
 
-        background = new MenuBackgroundPanel();
+        background = new MenuStyles();
         background.setLayout(new BorderLayout());
 
         cardLayout = new CardLayout();
-        cards = new JPanel(cardLayout);
-        cards.setOpaque(false);
+        panel = new JPanel(cardLayout);
+        panel.setOpaque(false);
 
         mainMenuPanel = new MainMenuPanel(this);
         newGamePanel = new NewGamePanel(this, controller);
         boardView = new BoardView(this, controller);
-//        newGamePanel = new NewGamePanel(this);
-//        boardView = new BoardView(this);
         playersPanel = new PlayersPanel(this);
         loadGamePanel = new LoadGamePanel(this);
 
-        cards.add(mainMenuPanel, "MainMenu");
-        cards.add(newGamePanel, "NewGame");
-        cards.add(boardView, "BoardView");
-        cards.add(playersPanel, "Players");
-        cards.add(loadGamePanel, "LoadGame");
+        panel.add(mainMenuPanel, "MainMenu");
+        panel.add(newGamePanel, "NewGame");
+        panel.add(boardView, "BoardView");
+        panel.add(playersPanel, "Players");
+        panel.add(loadGamePanel, "LoadGame");
 
-        background.add(cards, BorderLayout.CENTER);
+        background.add(panel, BorderLayout.CENTER);
 
         setJMenuBar(menuBar);
         setContentPane(background);
@@ -116,7 +113,7 @@ public class MainWindow extends JFrame {
     }
 
     public void showPanel(String name) {
-        cardLayout.show(cards, name);
+        cardLayout.show(panel, name);
     }
 
     // Getters para que el controlador pueda registrar listeners

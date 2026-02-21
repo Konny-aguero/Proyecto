@@ -5,6 +5,8 @@ import edu.ucr.C5C089_C5I146.reversedots.repository.FileGameRepository;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
 
@@ -117,6 +119,11 @@ public class GameController {
         // Por ahora solo simulamos que guarda bien
         System.out.println("Guardando partida en: " + file.getAbsolutePath());
         return true;
+    }
+    //obtener movmientos validos para mostrarlos en view
+    public List<int[]> getValidMoves() {
+        if (game == null) return new ArrayList<>();
+        return game.getValidMoves(game.getCurrentPlayer().getColor());
     }
 
 
