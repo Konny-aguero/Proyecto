@@ -1,5 +1,6 @@
 package edu.ucr.C5C089_C5I146.reversedots.view;
 
+import edu.ucr.C5C089_C5I146.reversedots.controller.GameController;
 import edu.ucr.C5C089_C5I146.reversedots.view.panels.*;
 import edu.ucr.C5C089_C5I146.reversedots.view.ui.MenuBackgroundPanel;
 
@@ -12,6 +13,7 @@ public class MainWindow extends JFrame {
 
     private CardLayout cardLayout;
     private JPanel cards;
+    private GameController controller;
 
     public MainMenuPanel mainMenuPanel;
     public NewGamePanel newGamePanel;
@@ -29,6 +31,7 @@ public class MainWindow extends JFrame {
     private JMenuItem exitItem;
 
     public MainWindow() {
+        controller = new GameController();
         setTitle("Reverse Dots");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(1100, 700);
@@ -56,8 +59,10 @@ public class MainWindow extends JFrame {
         cards.setOpaque(false);
 
         mainMenuPanel = new MainMenuPanel(this);
-        newGamePanel = new NewGamePanel(this);
-        boardView = new BoardView(this);
+        newGamePanel = new NewGamePanel(this, controller);
+        boardView = new BoardView(this, controller);
+//        newGamePanel = new NewGamePanel(this);
+//        boardView = new BoardView(this);
         playersPanel = new PlayersPanel(this);
         loadGamePanel = new LoadGamePanel(this);
 

@@ -1,11 +1,13 @@
 package edu.ucr.C5C089_C5I146.reversedots.model;
 
-public class Board {
+import java.io.Serializable;
+
+public class Board implements Serializable {
     private Piece[][] cells;
     private int size;
 
     public Board(int size) {
-        if (size <= 4 || size % 2 != 0) {
+        if (size < 4 || size % 2 != 0) {
             //Se lanza "IllegalArgumentException" porque
             // se le puede pasar un dato incorrecto al metodo
             throw new IllegalArgumentException("El tamaño debe ser par y mayor e igual que 4.");

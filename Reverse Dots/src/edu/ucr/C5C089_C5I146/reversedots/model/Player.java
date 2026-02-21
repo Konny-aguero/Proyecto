@@ -1,6 +1,8 @@
 package edu.ucr.C5C089_C5I146.reversedots.model;
 
-public class Player {
+import java.io.Serializable;
+
+public class Player implements Serializable {
     private String name;
     private Piece color;
     private int gamesWon;

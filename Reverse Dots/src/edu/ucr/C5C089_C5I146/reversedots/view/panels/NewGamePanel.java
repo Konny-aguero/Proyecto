@@ -1,5 +1,6 @@
 package edu.ucr.C5C089_C5I146.reversedots.view.panels;
 
+import edu.ucr.C5C089_C5I146.reversedots.controller.GameController;
 import edu.ucr.C5C089_C5I146.reversedots.view.MainWindow;
 import edu.ucr.C5C089_C5I146.reversedots.view.ui.UIUtils;
 
@@ -11,9 +12,11 @@ public class NewGamePanel extends JPanel {
     private JTextField p1Field;
     private JTextField p2Field;
     private JTextField sizeField;
+    private GameController controller;
 
-    public NewGamePanel(MainWindow window) {
+    public NewGamePanel(MainWindow window, GameController controller) {
 
+        this.controller = controller;
         setOpaque(false);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -57,8 +60,19 @@ public class NewGamePanel extends JPanel {
             }
 
             // → aquí se llamará al controlador real
-            window.boardView.buildBoard(size);
-            window.showPanel("BoardView");
+//            window.boardView.buildBoard(size);
+//            window.showPanel("BoardView");
+            try {
+                controller.startGame(p1, p2, size);
+
+                window.boardView.buildBoard(size);
+                window.boardView.refreshBoard(); // ← la crearemos ahora
+
+                window.showPanel("BoardView");
+
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         });
     }
 
