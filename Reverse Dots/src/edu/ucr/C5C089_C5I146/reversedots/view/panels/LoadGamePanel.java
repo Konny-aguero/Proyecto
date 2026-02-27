@@ -9,12 +9,7 @@ import java.awt.*;
 
 public class LoadGamePanel extends JPanel {
 
-    private final GameController controller;
-
     public LoadGamePanel(MainWindow window, GameController controller) {
-
-        this.controller = controller;
-
         setOpaque(false);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -27,11 +22,11 @@ public class LoadGamePanel extends JPanel {
         JButton load = MenuStyles.createMenuButton("Seleccionar archivo...");
         load.addActionListener(e -> {
 
-            JFileChooser fc = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser();
 
-            if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
 
-                java.io.File file = fc.getSelectedFile();
+                java.io.File file = fileChooser.getSelectedFile();
 
                 boolean loaded = controller.loadEGame(file);
 

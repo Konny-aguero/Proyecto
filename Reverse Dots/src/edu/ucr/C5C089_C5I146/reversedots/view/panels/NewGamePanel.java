@@ -12,11 +12,9 @@ public class NewGamePanel extends JPanel {
     private final JTextField p1Field;
     private final JTextField p2Field;
     private final JTextField sizeField;
-    private final GameController controller;
 
     public NewGamePanel(MainWindow window, GameController controller) {
 
-        this.controller = controller;
         setOpaque(false);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -81,7 +79,4 @@ public class NewGamePanel extends JPanel {
             }
         });
     }
-
-    public String getP1() { return p1Field.getText(); }
-    public String getP2() { return p2Field.getText(); }
 }

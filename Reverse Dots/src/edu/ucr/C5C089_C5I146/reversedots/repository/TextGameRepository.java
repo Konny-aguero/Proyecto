@@ -3,7 +3,9 @@ package edu.ucr.C5C089_C5I146.reversedots.repository;
 import edu.ucr.C5C089_C5I146.reversedots.model.*;
 
 import java.io.*;
-
+/**
+ * Guarda y carga partidas usando archivos de texto
+ */
 public class TextGameRepository implements GameRepository {
 
     @Override
@@ -48,7 +50,7 @@ public class TextGameRepository implements GameRepository {
             writer.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudo guardar", e);
         }
     }
 
@@ -93,10 +95,8 @@ public class TextGameRepository implements GameRepository {
             return game;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudo cargar", e);
         }
-
-        return null;
     }
 
     @Override

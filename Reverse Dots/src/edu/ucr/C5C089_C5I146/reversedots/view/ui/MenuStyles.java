@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MenuStyles extends JPanel {
-    private Image backgroundImage;
+    private final Image backgroundImage;
     public MenuStyles() {
         setOpaque(true);
         backgroundImage = new ImageIcon(getClass().getResource("images/fondo.png")).getImage();
@@ -23,6 +23,8 @@ public class MenuStyles extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
     }
 }

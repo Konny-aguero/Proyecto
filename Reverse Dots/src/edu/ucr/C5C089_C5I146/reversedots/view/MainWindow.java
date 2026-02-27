@@ -9,9 +9,8 @@ import java.awt.*;
 
 public class MainWindow extends JFrame {
 
-    private CardLayout cardLayout;
-    private JPanel panel;
-    private GameController controller;
+    private final CardLayout cardLayout;
+    private final JPanel panel;
 
     public MainMenuPanel mainMenuPanel;
     public NewGamePanel newGamePanel;
@@ -19,17 +18,11 @@ public class MainWindow extends JFrame {
     public PlayersPanel playersPanel;
     public LoadGamePanel loadGamePanel;
 
-    private MenuStyles background;
-
     private JMenuBar menuBar;
-    private JMenuItem newGameItem;
-    private JMenuItem loadGameItem;
-    private JMenuItem playersItem;
-    private JMenuItem exitItem;
 
     public MainWindow() {
 
-        controller = new GameController(); // ✔ controlador único
+        GameController controller = new GameController();
 
         setTitle("Reverse Dots");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -49,20 +42,18 @@ public class MainWindow extends JFrame {
 
         createMenuBar();
 
-        background = new MenuStyles();
+        MenuStyles background = new MenuStyles();
         background.setLayout(new BorderLayout());
 
         cardLayout = new CardLayout();
         panel = new JPanel(cardLayout);
         panel.setOpaque(false);
 
-        // 🔥 AQUÍ ESTÁ EL CAMBIO IMPORTANTE
         mainMenuPanel = new MainMenuPanel(this);
         newGamePanel = new NewGamePanel(this, controller);
         boardView = new BoardView(this, controller);
-        playersPanel = new PlayersPanel(this,controller);
+        playersPanel = new PlayersPanel(this, controller);
 
-        // ✅ ahora le pasamos el controller
         loadGamePanel = new LoadGamePanel(this, controller);
 
         panel.add(mainMenuPanel, "MainMenu");
@@ -83,10 +74,10 @@ public class MainWindow extends JFrame {
         menuBar = new JMenuBar();
         JMenu menu = new JMenu("Acciones");
 
-        newGameItem = new JMenuItem("Nueva partida");
-        loadGameItem = new JMenuItem("Cargar partida");
-        playersItem = new JMenuItem("Jugadores registrados");
-        exitItem = new JMenuItem("Salir");
+        JMenuItem newGameItem = new JMenuItem("Nueva partida");
+        JMenuItem loadGameItem = new JMenuItem("Cargar partida");
+        JMenuItem playersItem = new JMenuItem("Jugadores registrados");
+        JMenuItem exitItem = new JMenuItem("Salir");
 
         newGameItem.addActionListener(e -> showPanel("NewGame"));
         loadGameItem.addActionListener(e -> showPanel("LoadGame"));

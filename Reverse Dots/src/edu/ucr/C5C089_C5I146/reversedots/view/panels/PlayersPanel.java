@@ -9,12 +9,9 @@ import java.awt.*;
 
 public class PlayersPanel extends JPanel {
 
-    private final GameController controller;
     private final JTextArea list;
 
     public PlayersPanel(MainWindow window, GameController controller) {
-
-        this.controller = controller;
 
         setOpaque(false);
         setLayout(new GridBagLayout());
@@ -37,9 +34,7 @@ public class PlayersPanel extends JPanel {
         gbc.gridy++;
 
         JButton refresh = MenuStyles.createMenuButton("Actualizar");
-        refresh.addActionListener(e -> {
-            list.setText(controller.getRegisteredPlayersInfo());
-        });
+        refresh.addActionListener(e -> list.setText(controller.getRegisteredPlayersInfo()));
         add(refresh, gbc);
 
         gbc.gridy++;

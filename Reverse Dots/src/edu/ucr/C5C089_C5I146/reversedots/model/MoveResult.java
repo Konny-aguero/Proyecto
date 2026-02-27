@@ -1,5 +1,5 @@
 package edu.ucr.C5C089_C5I146.reversedots.model;
-
+/** Resultado posible de un movimiento */
 public enum MoveResult {
 
     SUCCESS,                // Movimiento realizado correctamente

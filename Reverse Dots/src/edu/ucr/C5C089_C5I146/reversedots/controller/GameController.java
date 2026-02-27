@@ -7,10 +7,13 @@ import edu.ucr.C5C089_C5I146.reversedots.repository.TextGameRepository;
 import edu.ucr.C5C089_C5I146.reversedots.repository.TextPlayerRepository;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Maneja la partida, crea el juego, procesa movimientos
+ * y coordina guardado/carga de datos y estadísticas.
+ */
 public class GameController {
 
     private final GameRepository gameRepository;
@@ -18,19 +21,28 @@ public class GameController {
 
     private Game game;
 
-    // 🔹 Constructor con inyección (el correcto según arquitectura)
+    /**
+     * Crea el controlador usando repositorios dados.
+     * @param gameRepository repositorio de partidas
+     * @param playerRepository repositorio de jugadores
+     */
     public GameController(GameRepository gameRepository,
                           PlayerRepository playerRepository) {
         this.gameRepository = gameRepository;
         this.playerRepository = playerRepository;
     }
 
-    // 🔹 Constructor vacío para no romper la vista
+    /**Crea el controlador usando repositorios por defecto*/
     public GameController() {
         this(new TextGameRepository(), new TextPlayerRepository());
     }
 
-    // Crear nueva partida
+    /**
+     * Inicia una nueva partida con dos jugadores y un tablero del tamaño dado.
+     * @param name1 nombre del jugador 1
+     * @param name2 nombre del jugador 2
+     * @param size tamaño del tablero
+     */
     public void startGame(String name1, String name2, int size) {
 
         Board board = new Board(size);
@@ -40,7 +52,12 @@ public class GameController {
 
         game = new Game(board, player1, player2, false);
     }
-
+    /**
+     * Intenta realizar un movimiento en la casilla indicada.
+     * @param row fila donde se quiere jugar
+     * @param col columna donde se quiere jugar
+     * @return resultado del intento
+     */
     public MoveResult makeMove(int row, int col) {
 
         if (game == null) {
@@ -56,62 +73,58 @@ public class GameController {
 
         return result;
     }
-
+    /** @return el tablero actual o null si no hay partida */
     public Board getBoard() {
         return game == null ? null : game.getBoard();
     }
-
+    /** @return el jugador actual o null si no hay partida */
     public Player getCurrentPlayer() {
         return game == null ? null : game.getCurrentPlayer();
     }
-
+    /** @return true si la partida ya terminó */
     public boolean isGameOver() {
         return game != null && game.isGameOver();
     }
-
+    /** @return el ganador o null si fue empate */
     public Player getWinner() {
         return game == null ? null : game.getWinner();
     }
-
-    public int[] getScores() {
-        return game == null ? null : game.getScores();
-    }
-
+    /** @return puntaje del jugador 1 */
     public int getPlayer1Score() {
         int[] scores = game.getScores();
         return (game.getPlayer1().getColor() == Piece.BLACK)
                 ? scores[0]
                 : scores[1];
     }
-
+    /** @return puntaje del jugador 2 */
     public int getPlayer2Score() {
         int[] scores = game.getScores();
         return (game.getPlayer2().getColor() == Piece.BLACK)
                 ? scores[0]
                 : scores[1];
     }
-
+    /** @return Nombre del jugador 1 */
     public String getPlayer1Name() {
         return game.getPlayer1().getName();
     }
-
+    /** @return Nombre del jugador 2 */
     public String getPlayer2Name() {
         return game.getPlayer2().getName();
     }
-
+    /** @return la partida completa */
     public Game getGame() {
         return game;
     }
-
+    /** @return Lista de movimientos válidos para el turno actual */
     public List<int[]> getValidMoves() {
         if (game == null) return new ArrayList<>();
         return game.getValidMoves(game.getCurrentPlayer().getColor());
     }
-
-    public void saveGame(File file) {
-        gameRepository.save(file.getAbsolutePath(), game);
-    }
-
+    /**
+     * Carga una partida desde un archivo
+     * @param file archivo desde el cual cargar
+     * @return true si se cargó bien
+     */
     public boolean loadGame(File file) {
         Game loaded = gameRepository.load(file.getAbsolutePath());
 
@@ -122,23 +135,31 @@ public class GameController {
         this.game = loaded;
         return true;
     }
-
+    /**
+     * Versión alternativa de carga usada por la vista.
+     * @param file archivo desde el cual cargar
+     * @return true si se cargó correctamente
+     */
     public boolean loadEGame(File file) {
         return loadGame(file);
     }
+    /**
+     * Guarda la partida con manejo simple de errores.
+     * @param file archivo donde guardar
+     * @return true si se guardó correctamente
+     */
+    public boolean saveEGame(File file) {
+        if (game == null) {
+            return false;
+        }
 
-public boolean saveEGame(File file) {
-    if (game == null) {
-        return false;
+        try {
+            gameRepository.save(file.getAbsolutePath(), game);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
-
-    try {
-        gameRepository.save(file.getAbsolutePath(), game);
-        return true;
-    } catch (Exception e) {
-        return false;
-    }
-}
 
     private void updatePlayerStats() {
 
@@ -180,7 +201,10 @@ public boolean saveEGame(File file) {
         playerRepository.update(p1);
         playerRepository.update(p2);
     }
-
+    /**
+     * Devuelve información de los jugadores registrados.
+     * @return texto con nombres y estadísticas
+     */
     public String getRegisteredPlayersInfo() {
 
         StringBuilder sb = new StringBuilder();
@@ -193,10 +217,9 @@ public boolean saveEGame(File file) {
 
         java.io.File[] files = folder.listFiles();
 
-        if (files.length == 0) {
+        if (files == null || files.length == 0) {
             return "No hay jugadores registrados.";
         }
-
         for (java.io.File file : files) {
 
             String name = file.getName().replace(".txt", "");

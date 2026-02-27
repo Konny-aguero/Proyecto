@@ -55,20 +55,7 @@ public class BoardView extends JPanel {
         messages.setLineWrap(true);
         messages.setWrapStyleWord(true);
 
-        JButton btnSave = new JButton("Guardar partida");
-        btnSave.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int option = fileChooser.showSaveDialog(this);
-            if (option == JFileChooser.APPROVE_OPTION) {
-                java.io.File file = fileChooser.getSelectedFile();
-                boolean saved = controller.saveEGame(file);
-                if (saved) {
-                    addMessage("Partida guardada correctamente.");
-                } else {
-                    addMessage("Error al guardar la partida.");
-                }
-            }
-        });
+        JButton btnSave = getBtnSave(controller);
 
         JScrollPane scroll = new JScrollPane(messages);
         scroll.getViewport().setBackground(new Color(100, 110, 150));
@@ -83,6 +70,24 @@ public class BoardView extends JPanel {
         side.add(btnSave);
 
         add(side, BorderLayout.EAST);
+    }
+
+    private JButton getBtnSave(GameController controller) {
+        JButton btnSave = new JButton("Guardar partida");
+        btnSave.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int option = fileChooser.showSaveDialog(this);
+            if (option == JFileChooser.APPROVE_OPTION) {
+                java.io.File file = fileChooser.getSelectedFile();
+                boolean saved = controller.saveEGame(file);
+                if (saved) {
+                    addMessage("Partida guardada correctamente.");
+                } else {
+                    addMessage("Error al guardar la partida.");
+                }
+            }
+        });
+        return btnSave;
     }
 
     // Crear tablero

@@ -3,18 +3,19 @@ package edu.ucr.C5C089_C5I146.reversedots.repository;
 import edu.ucr.C5C089_C5I146.reversedots.model.Player;
 
 import java.io.*;
-
+/**
+ * Guarda y carga datos de jugadores en archivos de texto
+ */
 public class TextPlayerRepository implements PlayerRepository {
 
     private static final String DIRECTORY = "players";
 
     public TextPlayerRepository() {
         File dir = new File(DIRECTORY);
-        if (!dir.exists()) {
-            dir.mkdir();
+        if (!dir.exists() && !dir.mkdir()) {
+            throw new RuntimeException("No se pudo crear el directorio: " + DIRECTORY);
         }
     }
-
     @Override
     public void save(Player player) {
 
@@ -28,7 +29,7 @@ public class TextPlayerRepository implements PlayerRepository {
             writePlayerToFile(player, file);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudo guardar", e);
         }
     }
 
@@ -59,10 +60,8 @@ public class TextPlayerRepository implements PlayerRepository {
             return player;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudo cargar", e);
         }
-
-        return null;
     }
 
     @Override
@@ -78,7 +77,7 @@ public class TextPlayerRepository implements PlayerRepository {
             File file = new File(DIRECTORY + "/" + player.getName() + ".txt");
             writePlayerToFile(player, file);
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("No se pudo actualizar", e);
         }
     }
 
