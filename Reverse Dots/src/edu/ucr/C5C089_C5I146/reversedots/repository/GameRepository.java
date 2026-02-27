@@ -17,9 +17,4 @@ public interface GameRepository {
      * @return la partida cargada o null si no existe
      */
     Game load(String path);
-    /**
-     * Indica si una partida existe en la ruta dada.
-     * @param path ruta del archivo a verificar
-     * @return true si existe, false si no
-     */
 }
