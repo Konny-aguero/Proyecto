@@ -1,4 +1,4 @@
-NAME=Konny
-WINS=0
+NAME=konny
+WINS=1
 LOSSES=1
 DRAWS=0

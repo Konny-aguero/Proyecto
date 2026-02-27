@@ -22,5 +22,4 @@ public interface GameRepository {
      * @param path ruta del archivo a verificar
      * @return true si existe, false si no
      */
-    boolean exists(String path);
 }

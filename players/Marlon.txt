@@ -1,4 +1,4 @@
-NAME=Marlon
+NAME=marlon
 WINS=1
-LOSSES=0
+LOSSES=1
 DRAWS=0

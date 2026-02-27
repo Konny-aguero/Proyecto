@@ -98,10 +98,4 @@ public class TextGameRepository implements GameRepository {
             throw new RuntimeException("No se pudo cargar", e);
         }
     }
-
-    @Override
-    public boolean exists(String path) {
-        File file = new File(path);
-        return file.exists();
-    }
 }
