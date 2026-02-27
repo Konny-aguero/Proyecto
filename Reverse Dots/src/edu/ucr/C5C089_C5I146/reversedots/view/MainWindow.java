@@ -12,6 +12,7 @@ public class MainWindow extends JFrame {
     private CardLayout cardLayout;
     private JPanel panel;
     private GameController controller;
+
     public MainMenuPanel mainMenuPanel;
     public NewGamePanel newGamePanel;
     public BoardView boardView;
@@ -27,7 +28,9 @@ public class MainWindow extends JFrame {
     private JMenuItem exitItem;
 
     public MainWindow() {
-        controller = new GameController();
+
+        controller = new GameController(); // ✔ controlador único
+
         setTitle("Reverse Dots");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setSize(1100, 700);
@@ -44,7 +47,6 @@ public class MainWindow extends JFrame {
             }
         });
 
-        // barra de menú
         createMenuBar();
 
         background = new MenuStyles();
@@ -54,11 +56,14 @@ public class MainWindow extends JFrame {
         panel = new JPanel(cardLayout);
         panel.setOpaque(false);
 
+        // 🔥 AQUÍ ESTÁ EL CAMBIO IMPORTANTE
         mainMenuPanel = new MainMenuPanel(this);
         newGamePanel = new NewGamePanel(this, controller);
         boardView = new BoardView(this, controller);
-        playersPanel = new PlayersPanel(this);
-        loadGamePanel = new LoadGamePanel(this);
+        playersPanel = new PlayersPanel(this,controller);
+
+        // ✅ ahora le pasamos el controller
+        loadGamePanel = new LoadGamePanel(this, controller);
 
         panel.add(mainMenuPanel, "MainMenu");
         panel.add(newGamePanel, "NewGame");
@@ -74,8 +79,8 @@ public class MainWindow extends JFrame {
     }
 
     private void createMenuBar() {
-        menuBar = new JMenuBar();
 
+        menuBar = new JMenuBar();
         JMenu menu = new JMenu("Acciones");
 
         newGameItem = new JMenuItem("Nueva partida");
@@ -83,10 +88,10 @@ public class MainWindow extends JFrame {
         playersItem = new JMenuItem("Jugadores registrados");
         exitItem = new JMenuItem("Salir");
 
-        // navegar a los panels correspondientes
         newGameItem.addActionListener(e -> showPanel("NewGame"));
         loadGameItem.addActionListener(e -> showPanel("LoadGame"));
         playersItem.addActionListener(e -> showPanel("Players"));
+
         exitItem.addActionListener(e -> {
             if (JOptionPane.showConfirmDialog(this,
                     "¿Desea salir del juego?", "Confirmación",
@@ -94,6 +99,7 @@ public class MainWindow extends JFrame {
                 System.exit(0);
             }
         });
+
         menu.add(newGameItem);
         menu.add(loadGameItem);
         menu.add(playersItem);

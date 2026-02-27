@@ -1,0 +1,4 @@
+NAME=karla
+WINS=1
+LOSSES=0
+DRAWS=0

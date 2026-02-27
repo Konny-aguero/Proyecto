@@ -122,90 +122,6 @@ public class Game implements Serializable {
         return false;
     }
 
-//    public boolean makeMove(int row, int col, Piece color) {
-//        if (!isValidMove(row, col, color)) {
-//            return false;
-//        }
-//
-//        Piece myColor = color;
-//        Piece enemyColor;
-//        if (myColor == Piece.BLACK) {
-//            enemyColor = Piece.WHITE;
-//        } else {
-//            enemyColor = Piece.BLACK;
-//        }
-//
-//        // colocar la pieza inicial
-//        board.setPiece(row, col, myColor);
-//
-//        // definir direcciones
-//        int[][] directions = {
-//                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
-//                {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-//        };
-//
-//        // voltea piezas en todas las direcciones validas
-//        for (int i = 0; i < directions.length; i++) {
-//            int dirRow = directions[i][0];
-//            int dirCol = directions[i][1];
-//
-//            if (canCaptureInDirection(row, col, dirRow, dirCol, myColor, enemyColor)) {
-//                flipPieces(row, col, dirRow, dirCol, myColor, enemyColor);
-//            }
-//        }
-//
-//        // cambia el turno
-//        switchTurn();
-//        return true;
-//    }
-
-//    public boolean makeMove(int row, int col, Piece moveColor) {
-//
-//        // 1. No permitir mover si el juego terminó
-//        if (isGameOver) {
-//            return false;
-//        }
-//
-//        // 2. Verificar que sea el turno correcto
-//        if (moveColor != color.getColor()) {
-//            return false;
-//        }
-//
-//        // 3. Verificar que sea movimiento válido
-//        if (!isValidMove(row, col, moveColor)) {
-//            return false;
-//        }
-//
-//        Piece enemyColor = (moveColor == Piece.BLACK) ? Piece.WHITE : Piece.BLACK;
-//
-//        // 4. Colocar la pieza
-//        board.setPiece(row, col, moveColor);
-//
-//        int[][] directions = {
-//                {-1, 0}, {1, 0}, {0, -1}, {0, 1},
-//                {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-//        };
-//
-//        // 5. Voltear piezas
-//        for (int[] dir : directions) {
-//            if (canCaptureInDirection(row, col, dir[0], dir[1], moveColor, enemyColor)) {
-//                flipPieces(row, col, dir[0], dir[1], moveColor, enemyColor);
-//            }
-//        }
-//
-//        // 6. Cambiar turno
-//        switchTurn();
-//
-//        // 7. Si el nuevo jugador no tiene movimientos, regresar turno
-//        if (!hasValidMoves(color.getColor())) {
-//            switchTurn();
-//        }
-//
-//        // 8. Verificar si el juego terminó
-//        checkGameOver();
-//
-//        return true;
-//    }
 public MoveResult makeMove(int row, int col, Piece moveColor) {
 
     // 1️⃣ Si el juego ya terminó
@@ -276,24 +192,6 @@ public MoveResult makeMove(int row, int col, Piece moveColor) {
         }
     }
 
-//    public boolean checkGameOver(Piece color) {
-//        // si hay movimientos posibles para el jugador actual entonces no ha terminado
-//        if (!getValidMoves(color).isEmpty()) {
-//            return false;
-//        }
-//
-//        // si el actual no puede entonces verificamos si el otro puede
-//        switchTurn();
-//        boolean canEnemyMoves = !getValidMoves(color).isEmpty();
-//        switchTurn(); // regresa al turno a como estaba
-//
-//        if (!canEnemyMoves) {
-//            this.isGameOver = true;
-//            return true;
-//        }
-//
-//        return false;
-//    }
 public boolean checkGameOver() {
 
     Piece currentColor = color.getColor();

@@ -1,0 +1,4 @@
+NAME=diego
+WINS=0
+LOSSES=1
+DRAWS=0
