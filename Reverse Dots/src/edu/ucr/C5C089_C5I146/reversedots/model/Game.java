@@ -168,7 +168,7 @@ public MoveResult makeMove(int row, int col, Piece moveColor) {
         return MoveResult.INVALID_POSITION;
     }
 
-    // 3️⃣ Verificar turno
+    // Verificar turno
     if (moveColor != color.getColor()) {
         return MoveResult.NOT_YOUR_TURN;
     }
